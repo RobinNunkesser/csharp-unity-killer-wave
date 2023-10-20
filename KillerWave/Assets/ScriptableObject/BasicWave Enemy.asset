@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 640870a066e484f9c93de1d79f063212, type: 3}
-  m_Name: BasicWaveEnemy
+  m_Name: BasicWave Enemy
   m_EditorClassIdentifier: 
   actorName: enemy_wave
   attackType: 0
