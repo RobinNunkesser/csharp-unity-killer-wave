@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class ScenesManager : MonoBehaviour
 {
@@ -36,6 +37,7 @@ public class ScenesManager : MonoBehaviour
 
     public void GameOver()
     {
+        Debug.Log($"End score: {GameManager.Instance.GetComponent<ScoreManager>().PlayerScore}");
         SceneManager.LoadScene("gameOver");
     }
 

@@ -11,9 +11,18 @@ public class GameManager : MonoBehaviour
         get { return instance; }
     }
 
+    public static int currentScene = 0;
+    public static int gameLevelScene = 3;
+
+    public static int playerLives = 3;
+
+    public bool Died { get; set; }
+
     void Awake()
     {
         CheckGameManagerIsInTheScene();
+        currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+        LightAndCameraSetup(currentScene);
     }
 
     private void CheckGameManagerIsInTheScene()
@@ -32,8 +41,22 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        CameraSetup();
-        LightSetup();
+    }
+
+    void LightAndCameraSetup(int sceneNumber)
+    {
+        switch (sceneNumber)
+        {
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+                {
+                    LightSetup();
+                    CameraSetup();
+                    break;
+                }
+        }
     }
 
     void CameraSetup()
@@ -58,5 +81,20 @@ public class GameManager : MonoBehaviour
     void Update()
     {
 
+    }
+
+    public void LiveLost()
+    {
+        if (playerLives >= 1)
+        {
+            playerLives--;
+            Debug.Log("Lives left: " + playerLives);
+            GetComponent<ScenesManager>().ResetScene();
+        }
+        else
+        {
+            playerLives = 3;
+            GetComponent<ScenesManager>().GameOver();
+        }
     }
 }
