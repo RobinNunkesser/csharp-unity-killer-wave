@@ -11,11 +11,47 @@ public class PlayerShipBuild : MonoBehaviour
     GameObject tmpSelection;
     GameObject textBoxPanel;
 
+    [SerializeField]
+    GameObject[] visualWeapons;
+    [SerializeField]
+    SOActorModel defaultPlayerShip;
+    GameObject playerShip;
+    GameObject buyButton;
+    GameObject bankObj;
+    int bank = 600;
+    bool purchaseMade = false;
+
     // Start is called before the first frame update
     void Start()
     {
         textBoxPanel = GameObject.Find("textBoxPanel");
         TurnOffSelectionHighlights();
+
+        purchaseMade = false;
+        bankObj = GameObject.Find("bank");
+        bankObj.GetComponentInChildren<TextMesh>().text = bank.ToString();
+        buyButton = textBoxPanel.transform.Find("BUY ?").gameObject;
+
+        TurnOffPlayerShipVisuals();
+        PreparePlayerShipForUpgrade();
+    }
+
+    private void PreparePlayerShipForUpgrade()
+    {
+        playerShip = GameObject.Instantiate(defaultPlayerShip.actor);
+
+        playerShip.GetComponent<Player>().enabled = false;
+        playerShip.transform.position = new Vector3(0, 10000, 0);
+        playerShip.GetComponent<IActorTemplate>().ActorStats(defaultPlayerShip);
+    }
+
+    private void TurnOffPlayerShipVisuals()
+    {
+        foreach (var weapon in visualWeapons)
+        {
+            weapon.gameObject.SetActive(false);
+        }
+
     }
 
     // Update is called once per frame
@@ -32,14 +68,45 @@ public class PlayerShipBuild : MonoBehaviour
             target = ReturnClickedObject(out hitInfo);
             if (target != null)
             {
-                if (target.transform.Find("itemText"))
+                var itemText = target.transform.Find("itemText");
+                if (itemText)
                 {
                     TurnOffSelectionHighlights();
                     Select();
                     UpdateDescriptionBox();
+
+                    if (itemText.GetComponent<TextMesh>().text != "SOLD")
+                    {
+                        Affordable();
+                    }
+                    else
+                    {
+                        SoldOut();
+                    }
+
                 }
             }
         }
+    }
+
+    private void SoldOut()
+    {
+        Debug.Log("SOLD OUT");
+    }
+
+    private void Affordable()
+    {
+        var cost = Int32.Parse(target.transform.GetComponent<ShopPiece>().ShopSelection.cost);
+        if (bank >= cost)
+        {
+            Debug.Log("CAN BUY");
+            buyButton.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("CAN'T BUY");
+        }
+
     }
 
     private void UpdateDescriptionBox()
