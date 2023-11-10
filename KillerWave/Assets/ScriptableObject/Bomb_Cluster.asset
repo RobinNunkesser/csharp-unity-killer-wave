@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fad51eb1179a471daeb6dcea73dec7c, type: 3}
   m_Name: Bomb_Cluster
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
-  iconName: 
-  description: 
-  cost: 
+  icon: {fileID: 21300000, guid: 6ed5376d571723c468eb82670c16757d, type: 3}
+  iconName: c. Bomb
+  description: Cluster Bomb
+  cost: 500
