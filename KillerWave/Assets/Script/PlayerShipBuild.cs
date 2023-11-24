@@ -107,9 +107,13 @@ public class PlayerShipBuild : MonoBehaviour
         if (purchaseMade)
         {
             playerShip.name = "UpgradedShip";
+            if (playerShip.transform.Find("energy +1(Clone)"))
+            {
+                playerShip.GetComponent<Player>().Health = 2;
+            }
             DontDestroyOnLoad(playerShip);
-            UnityEngine.SceneManagement.SceneManager.LoadScene("testLevel");
         }
+        UnityEngine.SceneManagement.SceneManager.LoadScene("testLevel");
     }
 
     private void BuyItem()
