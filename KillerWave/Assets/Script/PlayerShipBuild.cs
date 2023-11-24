@@ -85,7 +85,7 @@ public class PlayerShipBuild : MonoBehaviour
                     }
 
                 }
-                else if (target.name == "Buy ?")
+                else if (target.name == "BUY ?")
                 {
                     BuyItem();
                 }
