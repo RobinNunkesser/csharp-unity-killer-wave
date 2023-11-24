@@ -89,7 +89,26 @@ public class PlayerShipBuild : MonoBehaviour
                 {
                     BuyItem();
                 }
+                else if (target.name == "WATCH AD")
+                {
+                    bank += 300;
+                    bankObj.transform.Find("bankText").GetComponent<TextMesh>().text = bank.ToString();
+                }
+                else if (target.name == "START")
+                {
+                    StartGame();
+                }
             }
+        }
+    }
+
+    private void StartGame()
+    {
+        if (purchaseMade)
+        {
+            playerShip.name = "UpgradedShip";
+            DontDestroyOnLoad(playerShip);
+            UnityEngine.SceneManagement.SceneManager.LoadScene("testLevel");
         }
     }
 

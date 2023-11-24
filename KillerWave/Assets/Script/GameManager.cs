@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void CameraSetup()
+    public void CameraSetup()
     {
         var gameCamera = GameObject.FindGameObjectWithTag("MainCamera");
         gameCamera.transform.position = new Vector3(0, 0, -300);
