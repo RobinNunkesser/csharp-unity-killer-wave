@@ -85,8 +85,42 @@ public class PlayerShipBuild : MonoBehaviour
                     }
 
                 }
+                else if (target.name == "Buy ?")
+                {
+                    BuyItem();
+                }
             }
         }
+    }
+
+    private void BuyItem()
+    {
+        Debug.Log("PURCHASED");
+        purchaseMade = true;
+        buyButton.SetActive(false);
+        tmpSelection.SetActive(false);
+        var shopSelection = tmpSelection.transform.parent.gameObject.GetComponent<ShopPiece>().ShopSelection;
+
+        foreach (var visualWeapon in visualWeapons)
+        {
+            if (visualWeapon.name == shopSelection.iconName)
+            {
+                visualWeapon.SetActive(true);
+            }
+
+        }
+        UpgradeToShip(shopSelection.iconName);
+        bank -= Int32.Parse(shopSelection.cost);
+        bankObj.transform.Find("bankText").GetComponent<TextMesh>().text = bank.ToString();
+        tmpSelection.transform.parent.transform.Find("itemText").GetComponent<TextMesh>().text = "SOLD";
+    }
+
+    private void UpgradeToShip(string upgrade)
+    {
+        Debug.Log($"Upgrading {upgrade}");
+        var shipItem = GameObject.Instantiate(Resources.Load(upgrade)) as GameObject;
+        shipItem.transform.SetParent(playerShip.transform);
+        shipItem.transform.localPosition = Vector3.zero;
     }
 
     private void SoldOut()
