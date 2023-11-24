@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Shot_PowerUp
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: 4406a554de7d3994cb24b896cacde1ef, type: 3}
-  iconName: Shot
+  iconName: b. Shot
   description: Blast Shot
   cost: 400
