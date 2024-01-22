@@ -1,44 +1,48 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerBullet : MonoBehaviour, IActorTemplate
 {
-    int travelSpeed;
-    int health;
-    int hitPower;
     GameObject actor;
+    int hitPower;
+    int health;
+    int travelSpeed;
 
-    [SerializeField]
-    SOActorModel bulletModel;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        transform.position += new Vector3(travelSpeed, 0, 0) * Time.deltaTime;
-    }
+    [SerializeField] SOActorModel bulletModel;
 
     void Awake()
     {
         ActorStats(bulletModel);
     }
 
-    void OnBecameInvisible()
+    public int SendDamage()
     {
-        Destroy(gameObject);
+        return hitPower;
+    }
+
+    public void TakeDamage(int incomingDamage)
+    {
+        health -= incomingDamage;
+    }
+
+    public void Die()
+    {
+        Destroy(this.gameObject);
+    }
+
+    public void ActorStats(SOActorModel actorModel)
+    {
+        hitPower = actorModel.hitPower;
+        health = actorModel.health;
+        travelSpeed = actorModel.speed;
+        actor = actorModel.actor;
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Enemy")
         {
-            if (other.GetComponent<IActorTemplate>() != null)
+            if (other.GetComponent<IActorTemplate>() !=
+            null)
             {
                 if (health >= 1)
                 {
@@ -51,27 +55,12 @@ public class PlayerBullet : MonoBehaviour, IActorTemplate
             }
         }
     }
-
-    public void ActorStats(SOActorModel actorModel)
+    void Update()
     {
-        health = actorModel.health;
-        travelSpeed = actorModel.speed;
-        hitPower = actorModel.hitPower;
-        actor = actorModel.actor;
+        transform.position += new Vector3(travelSpeed, 0, 0) * Time.deltaTime;
     }
-
-    public void Die()
+    void OnBecameInvisible()
     {
-        Destroy(this.gameObject);
-    }
-
-    public int SendDamage()
-    {
-        return hitPower;
-    }
-
-    public void TakeDamage(int incomingDamage)
-    {
-        health -= incomingDamage;
+        Destroy(gameObject);
     }
 }

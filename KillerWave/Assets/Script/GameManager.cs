@@ -1,31 +1,82 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
+using System.Collections;
 public class GameManager : MonoBehaviour
 {
     static GameManager instance;
+
+    public static int playerLives = 3;
+    public static int currentScene = 0;
+    public static int gameLevelScene = 3;
+    bool died = false;
+    public bool Died
+    {
+        get { return died; }
+        set { died = value; }
+    }
+
     public static GameManager Instance
     {
         get { return instance; }
     }
 
-    public static int currentScene = 0;
-    public static int gameLevelScene = 3;
-
-    public static int playerLives = 3;
-
-    public bool Died { get; set; }
-
     void Awake()
     {
         CheckGameManagerIsInTheScene();
-        currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+        currentScene = UnityEngine.SceneManagement.SceneManager.
+        GetActiveScene().buildIndex;
         LightAndCameraSetup(currentScene);
     }
 
-    private void CheckGameManagerIsInTheScene()
+    void Start()
+    {
+        SetLivesDisplay(playerLives);
+    }
+
+    public void SetLivesDisplay(int players)
+    {
+        if (GameObject.Find("lives"))
+        {
+            GameObject lives = GameObject.Find("lives");
+            if (lives.transform.childCount < 1)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    GameObject life = GameObject.Instantiate(Resources.Load("life")) as GameObject;
+                    life.transform.SetParent(lives.transform);
+                }
+            }
+            //set visual lives
+            for (int i = 0; i < lives.transform.childCount; i++)
+            {
+               lives.transform.GetChild(i).localScale = new Vector3(1, 1, 1);
+            }
+            //remove visual lives
+            for (int i = 0; i < (lives.transform.childCount - players); i++)
+            {
+                lives.transform.GetChild(lives.transform.childCount - i - 1).localScale = Vector3.zero;
+            }
+        }
+    }
+    void LightAndCameraSetup(int sceneNumber)
+    {
+        switch (sceneNumber)
+        {
+            case 3:
+            case 4:
+                {
+                    LightSetup();
+                    CameraSetup(0);
+                    break;
+                }
+            case 5:
+                {
+                    CameraSetup(150);
+                    break;
+                }
+        }
+    }
+
+    void CheckGameManagerIsInTheScene()
     {
         if (instance == null)
         {
@@ -38,53 +89,36 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public void CameraSetup(float camSpeed)
     {
-    }
+        GameObject gameCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        gameCamera.GetComponent<CameraMovement>().CamSpeed = camSpeed;
 
-    void LightAndCameraSetup(int sceneNumber)
-    {
-        switch (sceneNumber)
-        {
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-                {
-                    LightSetup();
-                    CameraSetup();
-                    break;
-                }
-        }
-    }
-
-    public void CameraSetup()
-    {
-        var gameCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        //Camera Transform
         gameCamera.transform.position = new Vector3(0, 0, -300);
-        gameCamera.transform.eulerAngles = new Vector3(0, 0, 0);
+        gameCamera.transform.eulerAngles = new Vector3(0,0,0);
 
-        var camera = gameCamera.GetComponent<Camera>();
-        camera.clearFlags = CameraClearFlags.SolidColor;
-        camera.backgroundColor = new Color32(0, 0, 0, 255);
+        //Camera Properties
+        gameCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
+        gameCamera.GetComponent<Camera>().backgroundColor = new Color32(0,0,0,255);
     }
 
     void LightSetup()
     {
-        var dirLight = GameObject.Find("Directional Light");
-        dirLight.transform.eulerAngles = new Vector3(50, -30, 0);
-        dirLight.GetComponent<Light>().color = new Color32(152, 204, 255, 255);
+        GameObject dirLight = GameObject.Find("Directional Light");
+        dirLight.transform.eulerAngles = new Vector3(50,-30,0);
+        dirLight.GetComponent<Light>().color = new Color32(152,204,255,255);
+    }
+    public void LifeLost()
+    {
+        StartCoroutine(DelayedLifeLost());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+    IEnumerator DelayedLifeLost()
+	{
+        yield return new WaitForSeconds(2);
 
-    }
-
-    public void LiveLost()
-    {
+        //lose life
         if (playerLives >= 1)
         {
             playerLives--;

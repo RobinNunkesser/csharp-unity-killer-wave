@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Numerics;
 using UnityEngine;
 
 public class EnemyWave : MonoBehaviour, IActorTemplate
@@ -10,33 +6,18 @@ public class EnemyWave : MonoBehaviour, IActorTemplate
     int travelSpeed;
     int fireSpeed;
     int hitPower;
-    int score;
-
+    //wave enemy
     [SerializeField]
     float verticalSpeed = 2;
     [SerializeField]
     float verticalAmplitude = 1;
-    UnityEngine.Vector3 sineVer;
+    Vector3 sineVer;
     float time;
+    int score;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         Attack();
-    }
-
-    private void Attack()
-    {
-        time += Time.deltaTime;
-        sineVer.y = Mathf.Sin(time * verticalSpeed) * verticalAmplitude;
-        transform.position = new UnityEngine.Vector3(transform.position.x + travelSpeed * Time.deltaTime,
-            transform.position.y + sineVer.y, transform.position.z);
     }
 
     public void ActorStats(SOActorModel actorModel)
@@ -46,24 +27,16 @@ public class EnemyWave : MonoBehaviour, IActorTemplate
         hitPower = actorModel.hitPower;
         score = actorModel.score;
     }
-
     public void Die()
     {
+        GameObject explode = GameObject.Instantiate(Resources.Load("explode")) as GameObject;
+        explode.transform.position = this.gameObject.transform.position;
         Destroy(this.gameObject);
-    }
-
-    public int SendDamage()
-    {
-        return hitPower;
-    }
-
-    public void TakeDamage(int incomingDamage)
-    {
-        health -= incomingDamage;
     }
 
     void OnTriggerEnter(Collider other)
     {
+        // if the player or their bullet hits you.
         if (other.tag == "Player")
         {
             if (health >= 1)
@@ -73,10 +46,24 @@ public class EnemyWave : MonoBehaviour, IActorTemplate
             if (health <= 0)
             {
                 GameManager.Instance.GetComponent<ScoreManager>().SetScore(score);
-                Debug.Log($"Scored: {score}");
                 Die();
             }
         }
     }
 
+    public void TakeDamage(int incomingDamage)
+    {
+        health -= incomingDamage;
+    }
+    public int SendDamage()
+    {
+        return hitPower;
+    }
+
+    public void Attack()
+    {
+        time += Time.deltaTime;
+        sineVer.y = Mathf.Sin(time * verticalSpeed) * verticalAmplitude;
+        transform.position = new Vector3(transform.position.x + travelSpeed * Time.deltaTime, transform.position.y + sineVer.y, transform.position.z);
+    }
 }

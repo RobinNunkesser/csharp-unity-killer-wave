@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 23
-  productGUID: 80f9cc0ce70d346e482f424ef179514f
+  productGUID: eb13e57d19c264d3fbfd85747a37e705
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -669,8 +669,8 @@ PlayerSettings:
   XboxOneOverrideIdentityPublisher: 
   vrEditorSettings: {}
   cloudServicesEnabled:
+    Collab: 1
     UNet: 1
-    Unity Ads: 0
   luminIcon:
     m_Name: 
     m_ModelFolderPath: 
@@ -685,10 +685,10 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: b15904fc-4e04-4747-a780-5bb37839b541
+  cloudProjectId: e3aa2995-d062-4593-90a2-fee721b7cd4b
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: KillerWave
+  projectName: KillerWave 2024-01-22_11-38-55
   organizationId: robinnunkesser
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
